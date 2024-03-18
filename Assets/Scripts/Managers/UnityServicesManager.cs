@@ -1,5 +1,9 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -58,29 +62,65 @@ public class UnityServicesManager : MonoBehaviour {
 
     }
     
-    public Task<Lobby> CreateLobby(string lobbyName, int maxPlayers) {
+    public async Task CreateLobby(string lobbyName, int maxPlayers, string relayJoinCode) {
         CreateLobbyOptions options = new CreateLobbyOptions();
+        
         options.IsPrivate = false;
+        options.Data = new Dictionary<string, DataObject>() {
+            {
+                "RelayJoinCode", new DataObject(DataObject.VisibilityOptions.Public, relayJoinCode)
+            }
+        };
 		
-        return LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers);
+        var lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
+        StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
+        UserDataManager.Instance.currentLobby = lobby;
+    }
+    
+    IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds) {
+        var delay = new WaitForSecondsRealtime(waitTimeSeconds);
+
+        while (true) {
+            LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
+            yield return delay;
+        }
     }
     
     public Task<QueryResponse> QueryLobbies() {
         return Lobbies.Instance.QueryLobbiesAsync();
     }
 
-    public Task<Lobby> JoinLobbyByCode(string lobbyCode) {
-        return LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode);
+    public async Task JoinLobbyByCode(string lobbyCode) {
+        var lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCode);
+        UserDataManager.Instance.currentLobby = lobby;
     }
 
     public Task<Allocation> CreateRelayAllocation() {
         return RelayService.Instance.CreateAllocationAsync(2);
-/*
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "dtls"));
-*/
+    }
+
+    public void SetTransportToUseAllocation(Allocation a) {
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(a, "dtls"));
     }
 
     public Task<string> GetRelayJoinCodeFromAllocation(Allocation allocation) {
         return RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+    }
+
+    public async Task UpdatePlayerEmail() {
+        UpdatePlayerOptions options = new UpdatePlayerOptions();
+
+        options.Data = new Dictionary<string, PlayerDataObject>() {
+            {
+                "PlayerEmail", new PlayerDataObject(
+                    visibility: PlayerDataObject.VisibilityOptions.Public,
+                    value: UserDataManager.Instance.email)
+            }
+        };
+            
+        string playerId = AuthenticationService.Instance.PlayerId;
+            
+        UserDataManager.Instance.currentLobby = await LobbyService.Instance.UpdatePlayerAsync(UserDataManager.Instance.currentLobby.Id, playerId, options);
+        return;
     }
 }

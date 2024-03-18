@@ -7,28 +7,32 @@ using UnityEngine.UIElements;
 
 public class LobbyPage : MiniPage {
     [SerializeField] private StyleSheet styles;
-
-    private Lobby lobby;
     
     MiniElement playersSection;
     protected override async void RenderPage() {
         AddStyleSheet(styles);
         
-        //using email for now, change to name later
-        lobby = await UnityServicesManager.Instance.CreateLobby(UserDataManager.Instance.email, 2);
+        UserDataManager.Instance.relayAllocation = await UnityServicesManager.Instance.CreateRelayAllocation();
+        UnityServicesManager.Instance.SetTransportToUseAllocation(UserDataManager.Instance.relayAllocation);
+
+        var joinCode = await UnityServicesManager.Instance.GetRelayJoinCodeFromAllocation(UserDataManager.Instance.relayAllocation);
         
+        //using email for now, change to name later
+        await UnityServicesManager.Instance.CreateLobby(UserDataManager.Instance.email, 2, joinCode);
+
         var lobbyEventsCallbacks = new LobbyEventCallbacks();
-        // lobbyEventsCallbacks.OnPlayerJoined += OnPlayerJoined;
         lobbyEventsCallbacks.PlayerJoined += LobbyEventsCallbacksOnPlayerJoined;
-        await Lobbies.Instance.SubscribeToLobbyEventsAsync(lobby.Id, lobbyEventsCallbacks);
+        lobbyEventsCallbacks.PlayerDataChanged += LobbyEventsCallbacksOnPlayerDataChanged;
+        
+        await Lobbies.Instance.SubscribeToLobbyEventsAsync(UserDataManager.Instance.currentLobby.Id, lobbyEventsCallbacks);
         
         var div = CreateAndAddElement<MiniElement>("main");
 
         var container = div.CreateAndAddElement<MiniElement>("overlay");
 
         var row1 = container.CreateAndAddElement<MiniElement>("row");
-        //row1.CreateAndAddElement<Label>("white").text = lobby.Name;
-        row1.CreateAndAddElement<Label>("white").text = lobby.LobbyCode;
+        row1.CreateAndAddElement<Label>("white").text = UserDataManager.Instance.currentLobby.LobbyCode;
+        row1.CreateAndAddElement<Label>("white").text = joinCode;
         row1.CreateAndAddElement<Label>("white").text = "Waiting For Doctor to join...";
 
         playersSection = container.CreateAndAddElement<MiniElement>("container");
@@ -36,8 +40,12 @@ public class LobbyPage : MiniPage {
         patentRow.CreateAndAddElement<Label>().text = UserDataManager.Instance.email; // using email temp
     }
 
+    private void LobbyEventsCallbacksOnPlayerDataChanged(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> obj) {
+        print("player data changed");
+    }
+
     private void LobbyEventsCallbacksOnPlayerJoined(List<LobbyPlayerJoined> obj) {
-        print(lobby.Players.Count);
+        print(UserDataManager.Instance.currentLobby.Players.Count);
         foreach (var lobbyPlayerJoined in obj) {
             var doctorRow = playersSection.CreateAndAddElement<MiniElement>("row");
             doctorRow.CreateAndAddElement<Label>().text = lobbyPlayerJoined.Player.Id; // using email temp

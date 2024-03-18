@@ -21,13 +21,14 @@ public class DoctorDashboard : MiniPage {
         btn.text = "join lobby";
         btn.clicked += async () => {
             await UnityServicesManager.Instance.JoinLobbyByCode(tf.value);
+            await UnityServicesManager.Instance.UpdatePlayerEmail();
             print("joined lobby");
         };
         container = CreateAndAddElement<MiniElement>();
 
         foreach (var lobby in lobbiesQuery.Results) {
             container.CreateAndAddElement<Label>("white").text = lobby.Name;
-            container.CreateAndAddElement<Label>("white").text = lobby.LobbyCode;
+            container.CreateAndAddElement<Label>("white").text = lobby.Data["RelayJoinCode"].Value;
             container.CreateAndAddElement<Label>("white").text = lobby.Id;
             
             print(lobby.Name + lobby.LobbyCode + lobby.Id);
