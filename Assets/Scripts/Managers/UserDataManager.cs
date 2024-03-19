@@ -11,15 +11,13 @@ public class UserDataManager : MonoBehaviour {
     public string email;
     //public string playerId;
 
-    public Lobby currentLobby;
+    //public Lobby currentLobby;
+    public bool isLobbyHost;
+    
     public Allocation relayAllocation;
     
     private void Awake() {
         Instance = this;
         DontDestroyOnLoad(this);
-    }
-
-    private async void OnApplicationQuit() {
-        await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
     }
 }

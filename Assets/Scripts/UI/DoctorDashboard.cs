@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MiniUI;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -5,33 +6,42 @@ using UnityEngine.UIElements;
 
 public class DoctorDashboard : MiniPage {
     [SerializeField] private StyleSheet styles;
-    private TextField tf;
-    private Button btn;
-    private MiniElement container;
-    private QueryResponse lobbiesQuery;
-    
-    protected override async void RenderPage() {
+
+    private MiniElement lobbiesSection;
+    protected override void RenderPage() {
         AddStyleSheet(styles);
-
-        lobbiesQuery = await UnityServicesManager.Instance.QueryLobbies();
         
-        CreateAndAddElement<Label>("title").text = "Doctor Dashboard";
-        tf = CreateAndAddElement<TextField>();
-        btn = CreateAndAddElement<Button>("btn");
-        btn.text = "join lobby";
-        btn.clicked += async () => {
-            await UnityServicesManager.Instance.JoinLobbyByCode(tf.value);
-            await UnityServicesManager.Instance.UpdatePlayerEmail();
-            print("joined lobby");
-        };
-        container = CreateAndAddElement<MiniElement>();
+        var container = CreateAndAddElement<MiniElement>("overlay");
+        var topRow = container.CreateAndAddElement<MiniElement>("topRow");
 
-        foreach (var lobby in lobbiesQuery.Results) {
-            container.CreateAndAddElement<Label>("white").text = lobby.Name;
-            container.CreateAndAddElement<Label>("white").text = lobby.Data["RelayJoinCode"].Value;
-            container.CreateAndAddElement<Label>("white").text = lobby.Id;
-            
-            print(lobby.Name + lobby.LobbyCode + lobby.Id);
+        topRow.CreateAndAddElement<Label>().text = "Available Rooms";
+        
+        var refreshBtn = topRow.CreateAndAddElement<Button>();
+        refreshBtn.text = "Refresh List";
+        refreshBtn.clicked += () => {
+            print("refresh clicked");
+            ListRooms();
+        };
+
+        lobbiesSection = container.CreateAndAddElement<MiniElement>("lobbiesSection");
+
+        ListRooms();
+    }
+
+    private async void ListRooms() {
+        lobbiesSection.hierarchy.Clear();
+        
+        List<Lobby> lobbies = await UnityServicesManager.Instance.QueryLobbies();
+
+        foreach (Lobby lobby in lobbies) {
+            var lobbyRow = lobbiesSection.CreateAndAddElement<MiniElement>("lobbyRow");
+            lobbyRow.CreateAndAddElement<Label>().text = lobby.Name;
+            var joinBtn = lobbyRow.CreateAndAddElement<Button>();
+            joinBtn.text = "Join Room";
+            joinBtn.clicked += async () => {
+                await UnityServicesManager.Instance.JoinLobby(lobby.Id);
+                GetComponent<MiniComponentRouter>().Navigate(this, "DoctorLobbyPage");
+            };
         }
     }
 }

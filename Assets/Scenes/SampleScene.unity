@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 53053882}
   - component: {fileID: 53053881}
   - component: {fileID: 53053880}
+  - component: {fileID: 53053885}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -217,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showPreview: 0
-  styles: {fileID: 7433441132597879392, guid: f38f5413ef39bc6479a1ff13b48b9054, type: 3}
+  styleSheet: {fileID: 7433441132597879392, guid: 72d9601153fc1e745a7cc9abf41c9054, type: 3}
 --- !u!114 &53053881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,7 +232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showPreview: 0
-  styles: {fileID: 7433441132597879392, guid: f38f5413ef39bc6479a1ff13b48b9054, type: 3}
+  styles: {fileID: 7433441132597879392, guid: 72d9601153fc1e745a7cc9abf41c9054, type: 3}
 --- !u!114 &53053882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +275,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showPreview: 0
   _styles: {fileID: 7433441132597879392, guid: f38f5413ef39bc6479a1ff13b48b9054, type: 3}
+--- !u!114 &53053885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53053875}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c521db599ced14b48a61d31ae32e8189, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showPreview: 0
+  styles: {fileID: 7433441132597879392, guid: 72d9601153fc1e745a7cc9abf41c9054, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   role: 
   email: 
+  isLobbyHost: 0
 --- !u!114 &1840735972
 MonoBehaviour:
   m_ObjectHideFlags: 0

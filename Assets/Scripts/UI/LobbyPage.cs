@@ -1,54 +1,63 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using MiniUI;
 using Unity.Services.Lobbies;
-using Unity.Services.Lobbies.Models;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class LobbyPage : MiniPage {
-    [SerializeField] private StyleSheet styles;
-    
-    MiniElement playersSection;
-    protected override async void RenderPage() {
-        AddStyleSheet(styles);
+    [SerializeField] private StyleSheet styleSheet;
+
+    private Label doctorStatusLabel;
+    private Label lobbyCodeLabel;
+    protected override void RenderPage() {
+        AddStyleSheet(styleSheet);
+
+        var container = CreateAndAddElement<MiniElement>("overlay");
+
+        var topRow = container.CreateAndAddElement<MiniElement>("topRow");
+
+        doctorStatusLabel = topRow.CreateAndAddElement<Label>();
+        doctorStatusLabel.text = "Waiting for Doctor...";
         
-        UserDataManager.Instance.relayAllocation = await UnityServicesManager.Instance.CreateRelayAllocation();
-        UnityServicesManager.Instance.SetTransportToUseAllocation(UserDataManager.Instance.relayAllocation);
+        lobbyCodeLabel = topRow.CreateAndAddElement<Label>();
+        lobbyCodeLabel.text = "XXXXXX";
 
-        var joinCode = await UnityServicesManager.Instance.GetRelayJoinCodeFromAllocation(UserDataManager.Instance.relayAllocation);
+        var optionsSection = container.CreateAndAddElement<MiniElement>("optionsSection");
+
+        var inputDeviceDropDown = optionsSection.CreateAndAddElement<DropdownField>();
+        inputDeviceDropDown.value = "Select Audio Input Device";
+        // inputDeviceDropDown.choices = new List<string>() { };
+
+        var bottomRow = container.CreateAndAddElement<MiniElement>("bottomRow");
+
+        var readyBtn = bottomRow.CreateAndAddElement<Button>();
+        readyBtn.text = "Ready?";
+        readyBtn.clicked += async () => {
+            await UnityServicesManager.Instance.TogglePlayerReadyStatus();
+            UnityServicesManager.Instance.PrintPlayersInLobby();
+        };
         
-        //using email for now, change to name later
-        await UnityServicesManager.Instance.CreateLobby(UserDataManager.Instance.email, 2, joinCode);
-
-        var lobbyEventsCallbacks = new LobbyEventCallbacks();
-        lobbyEventsCallbacks.PlayerJoined += LobbyEventsCallbacksOnPlayerJoined;
-        lobbyEventsCallbacks.PlayerDataChanged += LobbyEventsCallbacksOnPlayerDataChanged;
-        
-        await Lobbies.Instance.SubscribeToLobbyEventsAsync(UserDataManager.Instance.currentLobby.Id, lobbyEventsCallbacks);
-        
-        var div = CreateAndAddElement<MiniElement>("main");
-
-        var container = div.CreateAndAddElement<MiniElement>("overlay");
-
-        var row1 = container.CreateAndAddElement<MiniElement>("row");
-        row1.CreateAndAddElement<Label>("white").text = UserDataManager.Instance.currentLobby.LobbyCode;
-        row1.CreateAndAddElement<Label>("white").text = joinCode;
-        row1.CreateAndAddElement<Label>("white").text = "Waiting For Doctor to join...";
-
-        playersSection = container.CreateAndAddElement<MiniElement>("container");
-        var patentRow = playersSection.CreateAndAddElement<MiniElement>("row");
-        patentRow.CreateAndAddElement<Label>().text = UserDataManager.Instance.email; // using email temp
+        SetupPageBackend();
     }
 
-    private void LobbyEventsCallbacksOnPlayerDataChanged(Dictionary<int, Dictionary<string, ChangedOrRemovedLobbyValue<PlayerDataObject>>> obj) {
-        print("player data changed");
+    private async void SetupPageBackend() {
+        UnityServicesManager.Instance.OnPlayerJoinedLobby += () => {
+
+            StartCoroutine(UpdateLabel());
+        };
+        
+        
+        
+        await UnityServicesManager.Instance.CreateLobby();
+        lobbyCodeLabel.text = UnityServicesManager.Instance.currentLobby.LobbyCode;
     }
 
-    private void LobbyEventsCallbacksOnPlayerJoined(List<LobbyPlayerJoined> obj) {
-        print(UserDataManager.Instance.currentLobby.Players.Count);
-        foreach (var lobbyPlayerJoined in obj) {
-            var doctorRow = playersSection.CreateAndAddElement<MiniElement>("row");
-            doctorRow.CreateAndAddElement<Label>().text = lobbyPlayerJoined.Player.Id; // using email temp
-        }
+    IEnumerator UpdateLabel() {
+        yield return new WaitForSecondsRealtime(2f);
+        
+        doctorStatusLabel.text = UnityServicesManager.Instance.currentLobby.Players[1].Data["PlayerName"].Value + " has joined";
     }
 }
