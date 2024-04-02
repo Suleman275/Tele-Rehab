@@ -46,7 +46,6 @@ public class LoginPage : MiniPage {
             else {
                 router.Navigate(this, "TestDocDash");
             }
-            
         };
 
         APIManager.Instance.UserSignInFailed += errorMsg => errorText.text = errorMsg;
