@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OfflineBallSpawner : MonoBehaviour {
@@ -11,6 +9,13 @@ public class OfflineBallSpawner : MonoBehaviour {
             Vector3 spawnPosition = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z);
             var ball = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
             ball.transform.SetParent(transform);
+        }
+    }
+
+    public void ClearChildren() {
+        // Destroy all children of this GameObject
+        foreach (Transform child in transform) {
+            Destroy(child.gameObject);
         }
     }
 }
