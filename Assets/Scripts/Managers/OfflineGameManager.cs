@@ -5,8 +5,9 @@ using UnityEditor;
 using UnityEngine;
 
 public class OfflineGameManager : MonoBehaviour {
-    [SerializeField] private GameObject OfflineGameEnv;
-    [SerializeField] private OfflineBallSpawner OfflineBallSpawner;
+    [SerializeField] private GameObject offlineGameEnv;
+    [SerializeField] private OfflineBallSpawner offlineBallSpawner;
+    [SerializeField] private OfflineMiddleWall offlineMiddleWall;
     
     public static OfflineGameManager Instance;
 
@@ -16,7 +17,8 @@ public class OfflineGameManager : MonoBehaviour {
 
     public void StartGame(int numOfBalls, int wallHeight) {
         //print($"starting game with {numOfBalls} and {wallHeight}");
-        OfflineGameEnv.SetActive(true);
-        OfflineBallSpawner.SpawnBalls(numOfBalls);
+        offlineGameEnv.SetActive(true);
+        offlineBallSpawner.SpawnBalls(numOfBalls);
+        offlineMiddleWall.SetWallHeight(wallHeight);
     }
 }

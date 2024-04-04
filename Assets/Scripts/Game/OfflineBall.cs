@@ -5,7 +5,7 @@ public class OfflineBall : MonoBehaviour {
     private TempHandOffline holdingHand;
 
     private void Update() {
-        if (holdingHand != null) {
+        if (holdingHand) {
             transform.position = holdingHand.transform.position;
         }
     }

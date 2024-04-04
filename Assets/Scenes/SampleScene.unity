@@ -262,8 +262,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5041d6badb0664ba9b61da11548a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OfflineGameEnv: {fileID: 568962771}
-  OfflineBallSpawner: {fileID: 1630968282}
+  offlineGameEnv: {fileID: 568962771}
+  offlineBallSpawner: {fileID: 1630968282}
+  offlineMiddleWall: {fileID: 1578702297}
 --- !u!1 &480627461
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,6 +809,7 @@ GameObject:
   - component: {fileID: 1578702294}
   - component: {fileID: 1578702296}
   - component: {fileID: 1578702295}
+  - component: {fileID: 1578702297}
   m_Layer: 0
   m_Name: MiddleWall
   m_TagString: Untagged
@@ -927,6 +929,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1578702297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578702293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fb4dd17924abc42857d6380c0b6d3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1630968280
 GameObject:
   m_ObjectHideFlags: 0
