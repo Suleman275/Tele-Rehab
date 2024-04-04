@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TempPlayerOffline : MonoBehaviour  {
-    public float moveSpeed = 5f; // Adjust the movement speed as needed
-
+public class TempHandOffline : MonoBehaviour {
+    public float moveSpeed = 5f;
+    public bool hasBall;
     private void Update()  {
         // Get input for movement
         float horizontalInput = Input.GetAxis("Horizontal");

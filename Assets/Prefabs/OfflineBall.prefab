@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1429611290434973425}
   - component: {fileID: 4263068709797955987}
   - component: {fileID: 5341855487112012051}
+  - component: {fileID: -7785467455120186563}
   m_Layer: 0
   m_Name: OfflineBall
   m_TagString: Untagged
@@ -148,3 +149,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-7785467455120186563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273885035573903447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3def492a7122cbf418b1b9350adc81af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
