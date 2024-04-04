@@ -15,22 +15,25 @@ public class TestPatDash : MiniPage {
         };
 
         var playHostBtn = CreateAndAddElement<Button>();
-        playHostBtn.text = "NetCode Test Host";
+        playHostBtn.text = "NetCode Test Host with relay";
         playHostBtn.clicked += () => {
             enabled = false;
-            NetworkManager.Singleton.StartHost();
+            OnlineGameManager.Instance.StartHost();
         };
+
+        var codeTf = CreateAndAddElement<TextField>();
+        codeTf.value = "Enter Join Code";
 
         var playClientBtn = CreateAndAddElement<Button>();
-        playClientBtn.text = "NetCode Test Client";
+        playClientBtn.text = "NetCode Test Client with relay";
         playClientBtn.clicked += () => {
             enabled = false;
-            NetworkManager.Singleton.StartClient();
+            OnlineGameManager.Instance.StartClient(codeTf.value);
         };
 
-        var createRelayBtn = CreateAndAddElement<Button>();
-        createRelayBtn.text = "Create relay";
-        createRelayBtn.clicked += () => { };
+        // var createRelayBtn = CreateAndAddElement<Button>();
+        // createRelayBtn.text = "Create relay";
+        // createRelayBtn.clicked += () => { };
         
         
     }
