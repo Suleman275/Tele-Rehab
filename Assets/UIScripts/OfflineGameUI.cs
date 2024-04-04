@@ -2,7 +2,7 @@ using UnityEngine.UIElements;
 using MiniUI;
 using UnityEngine;
 
-public class OfflineInGameUI : MiniPage {
+public class OfflineGameUI : MiniPage {
     private Label ballCounterLabel;
     protected override void RenderPage() {
         ballCounterLabel = CreateAndAddElement<Label>();
@@ -27,6 +27,9 @@ public class OfflineInGameUI : MiniPage {
 
         var exitBtn = CreateAndAddElement<Button>();
         exitBtn.text = "Exit to Dashboard";
-        exitBtn.clicked += () => { };
+        exitBtn.clicked += () => {
+            enabled = false;
+            OfflineGameManager.Instance.ExitGame();
+        };
     }
 }

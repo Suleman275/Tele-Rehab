@@ -9,7 +9,8 @@ public class OfflineGameManager : MonoBehaviour {
     [SerializeField] private GameObject offlineGameEnv;
     [SerializeField] private OfflineBallSpawner offlineBallSpawner;
     [SerializeField] private OfflineMiddleWall offlineMiddleWall;
-    [SerializeField] private OfflineInGameUI offlineInGameUI;
+    [SerializeField] private OfflineGameUI offlineGameUI;
+    [SerializeField] private TestPatDash patientDashboard;
     
     public static OfflineGameManager Instance;
 
@@ -28,26 +29,32 @@ public class OfflineGameManager : MonoBehaviour {
         offlineGameEnv.SetActive(true);
         offlineBallSpawner.SpawnBalls(numOfBalls);
         offlineMiddleWall.SetWallHeight(wallHeight);
-        offlineInGameUI.SetCounterLabelText("Balls Completed 0 / " + numOfBalls);
+        offlineGameUI.SetCounterLabelText("Balls Completed 0 / " + numOfBalls);
     }
 
     public void BallCompleted() {
         numCompletedBalls++;
-        offlineInGameUI.SetCounterLabelText($"Balls Completed {numCompletedBalls} / {totalBalls}");
+        offlineGameUI.SetCounterLabelText($"Balls Completed {numCompletedBalls} / {totalBalls}");
 
         if (numCompletedBalls == totalBalls) {
             print("Game Completed");
-            offlineInGameUI.GameCompleted();
+            offlineGameUI.GameCompleted();
         }
     }
 
     public void RestartGame() {
         offlineBallSpawner.ClearChildren();
         numCompletedBalls = 0;
+        offlineGameUI.enabled = true;
         
-        offlineBallSpawner.SpawnBalls(totalBalls);
-        offlineMiddleWall.SetWallHeight(wallHeight);
-        offlineInGameUI.enabled = true;
-        offlineInGameUI.SetCounterLabelText("Balls Completed 0 / " + totalBalls);
+        StartGame(totalBalls, wallHeight);
+    }
+
+    public void ExitGame() {
+        numCompletedBalls = 0;
+        offlineBallSpawner.ClearChildren();
+        offlineGameEnv.SetActive(false);
+        
+        patientDashboard.enabled = true;
     }
 }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public class OfflineBall : MonoBehaviour {
-    private bool isCompleted;
+    public bool isCompleted;
     private TempHandOffline holdingHand;
 
     private void Update() {
