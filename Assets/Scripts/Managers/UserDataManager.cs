@@ -15,7 +15,6 @@ public class UserDataManager : MonoBehaviour {
         SetupEvents();
     }
 
-
     private void SetupEvents() {
         APIManager.Instance.UserSignedIn += model => {
             userEmail = model.email;
