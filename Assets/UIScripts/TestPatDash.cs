@@ -31,9 +31,11 @@ public class TestPatDash : MiniPage {
             OnlineGameManager.Instance.StartClient(codeTf.value);
         };
 
-        // var createRelayBtn = CreateAndAddElement<Button>();
-        // createRelayBtn.text = "Create relay";
-        // createRelayBtn.clicked += () => { };
+        var createLobbyBtn = CreateAndAddElement<Button>();
+        createLobbyBtn.text = "Create Lobby";
+        createLobbyBtn.clicked += () => {
+            router.Navigate(this, "LobbyPage");
+        };
         
         
     }

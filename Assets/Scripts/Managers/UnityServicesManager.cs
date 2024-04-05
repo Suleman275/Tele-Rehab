@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using Unity.Networking.Transport.Relay;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
@@ -15,7 +14,7 @@ public class UnityServicesManager : MonoBehaviour {
         Instance = this;
     }
 
-    public async Task<string> StartHostWithRelay(int maxConnections=2) {
+    public async Task<string> StartHostWithRelay() {
         print("starting host");
         //Initialize the Unity Services engine
         await UnityServices.InitializeAsync();
@@ -24,17 +23,16 @@ public class UnityServicesManager : MonoBehaviour {
             //If not already logged, log the user in
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
-
-        // Request allocation and join code
-        Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
-        var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-        // Configure transport
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "dtls"));
-        // Start host
-        return NetworkManager.Singleton.StartHost() ? joinCode : null;
+        
+        Allocation a = await RelayService.Instance.CreateAllocationAsync(2);
+        var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
+        NetworkManager.Singleton.StartHost();
+        
+        return joinCode;
     }
     
-    public async Task<bool> StartClientWithRelay(string joinCode) {
+    public async void StartClientWithRelay(string joinCode) {
         print("starting client");
         //Initialize the Unity Services engine
         await UnityServices.InitializeAsync();
@@ -45,10 +43,10 @@ public class UnityServicesManager : MonoBehaviour {
         }
 
         // Join allocation
-        var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode: joinCode);
+        var a = await RelayService.Instance.JoinAllocationAsync(joinCode);
         // Configure transport
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData, a.HostConnectionData);
         // Start client
-        return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
+        NetworkManager.Singleton.StartClient();
     }
 }

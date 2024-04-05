@@ -20,7 +20,6 @@ public class OnlineGameManager : MonoBehaviour {
     public async void StartClient(string joinCode) {
         onlineGameEnv.SetActive(true);
         onlineGameUI.setCodeLabel(joinCode);
-        bool result = await UnityServicesManager.Instance.StartClientWithRelay(joinCode);
-        print(result);
+        UnityServicesManager.Instance.StartClientWithRelay(joinCode);
     }
 }
