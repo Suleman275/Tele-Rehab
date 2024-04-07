@@ -36,7 +36,11 @@ public class TestPatDash : MiniPage {
         createLobbyBtn.clicked += () => {
             router.Navigate(this, "LobbyPage");
         };
-        
-        
+
+        var listLobbiesPage = CreateAndAddElement<Button>();
+        listLobbiesPage.text = "List Lobbies";
+        listLobbiesPage.clicked += () => {
+            router.Navigate(this, "ListLobbiesPage");
+        };
     }
 }

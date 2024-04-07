@@ -5,9 +5,12 @@ public class TempHandOnline : NetworkBehaviour {
     public float moveSpeed = 5f;
     public bool hasBall;
 
-    public override void OnNetworkSpawn() {
-        print("Player spawned");
-    }
+    // public override void OnNetworkSpawn() {
+    //     print("Player spawned");
+    //     if (UserDataManager.Instance.userRole == "Doctor") {
+    //         print("no hands");
+    //     }
+    // }
 
     private void Update()  {
         // Get input for movement
