@@ -17,7 +17,6 @@ public class UnityServicesManager : MonoBehaviour {
     public static UnityServicesManager Instance;
 
     public Lobby currentLobby;
-    private bool isLobbyHost;
     
     private float lobbyPollTimer;
 
@@ -95,6 +94,7 @@ public class UnityServicesManager : MonoBehaviour {
 
                 if (updatedLobby.Players.Count > currentLobby.Players.Count) {
                     currentLobby = updatedLobby;
+                    MigrateHost();
                     OnPlayerJoinedLobby?.Invoke();
                 }
                 else {
@@ -161,11 +161,22 @@ public class UnityServicesManager : MonoBehaviour {
         };
         try {
             currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
-            isLobbyHost = false;
             print("joined lobby");
         }
         catch (LobbyServiceException e) {
             Debug.Log(e);
+        }
+    }
+    
+    public async void MigrateHost() {
+        try {
+            await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, new UpdateLobbyOptions() {
+                HostId = currentLobby.Players[1].Id
+            });
+            print("Host migrated");
+        }
+        catch (LobbyServiceException e) {
+            print(e);
         }
     }
 }

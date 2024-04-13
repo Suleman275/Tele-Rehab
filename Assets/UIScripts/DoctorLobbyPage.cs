@@ -21,10 +21,11 @@ public class DoctorLobbyPage : MiniPage {
         wallDD.choices.Add("11");
 
         var btn = CreateAndAddElement<Button>();
-        btn.text = "Ready?";
+        btn.text = "Start Game";
         btn.clicked += () => {
             // OnlineGameManager.Instance.SetGameData(ballsDD.value, wallDD.value);
             // UnityServicesManager.Instance.TogglePlayerReadyOwn();
+            //OnlineGameManager.Instance.TempSetDataAndStartHost(ballsDD.value, wallDD.value);
         };
     }
 }

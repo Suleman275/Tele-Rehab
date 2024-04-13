@@ -9,23 +9,8 @@ public class OnlineGameManager : MonoBehaviour {
     
     public static OnlineGameManager Instance;
 
-    private static List<TempPlayerOnline> playersList;
-
     private void Awake() {
-        playersList = new List<TempPlayerOnline>();
         Instance = this;
-    }
-
-    private void Start() {
-        SetupEvents();
-    }
-
-    private void SetupEvents() {
-        // TempPlayerOnline.OnAnyPlayerSpawned += player => {
-        //     print(player.IsHost);
-        //     playersList.Add(player);
-        //     print("player joined");
-        // };
     }
 
     public async void StartHost() {
@@ -39,4 +24,8 @@ public class OnlineGameManager : MonoBehaviour {
         onlineGameUI.setCodeLabel(joinCode);
         UnityServicesManager.Instance.StartClientWithRelay(joinCode);
     }
+
+    // public void TempSetDataAndStartHost(string numOfBalls, string wallHeight) {
+    //     UnityServicesManager.Instance.SetLobbyData(numOfBalls, wallHeight);
+    // }
 }
