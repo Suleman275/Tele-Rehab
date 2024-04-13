@@ -116,7 +116,7 @@ public class UnityServicesManager : MonoBehaviour {
             Player = new Player(
                 data: new Dictionary<string, PlayerDataObject>() { 
                     {
-                        "Username", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, UserDataManager.Instance.userEmail) 
+                        "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, UserDataManager.Instance.userEmail) 
                     },
                     {
                         "PlayerId", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, UserDataManager.Instance.userId)
@@ -144,5 +144,28 @@ public class UnityServicesManager : MonoBehaviour {
     public async Task<List<Lobby>> QueryLobbies() {
         QueryResponse lobbies = await Lobbies.Instance.QueryLobbiesAsync();
         return lobbies.Results;
+    }
+
+    public async Task JoinLobbyById(string lobbyId) {
+        var options = new JoinLobbyByIdOptions() {
+            Player = new Player(
+                data: new Dictionary<string, PlayerDataObject>() {
+                    {
+                        "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public,
+                            UserDataManager.Instance.userEmail)
+                    }, {
+                        "PlayerId", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, UserDataManager.Instance.userId)
+                    }
+                }
+            )
+        };
+        try {
+            currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
+            isLobbyHost = false;
+            print("joined lobby");
+        }
+        catch (LobbyServiceException e) {
+            Debug.Log(e);
+        }
     }
 }
