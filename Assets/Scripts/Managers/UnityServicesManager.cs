@@ -115,25 +115,25 @@ public class UnityServicesManager : MonoBehaviour {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
         
-        Allocation a = await RelayService.Instance.CreateAllocationAsync(2);
-        var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
+        // Allocation a = await RelayService.Instance.CreateAllocationAsync(2);
+        // var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
         
 
         var options = new CreateLobbyOptions() {
             IsPrivate = false,
-            Data = new Dictionary<string, DataObject>() {
-                {
-                    "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode)
-                }
-            },
+            // Data = new Dictionary<string, DataObject>() {
+            //     {
+            //         "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode)
+            //     }
+            // },
             Player = new Player() {
                 Data = new Dictionary<string, PlayerDataObject>() {
                     {
                         "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, UserDataManager.Instance.userEmail) //using email for now
                     },
-                    {
-                        "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
-                    }
+                    // {
+                    //     "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
+                    // }
                 }
             }
         };
@@ -142,8 +142,8 @@ public class UnityServicesManager : MonoBehaviour {
 
         StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
         
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
-        NetworkManager.Singleton.StartHost();
+        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
+        // NetworkManager.Singleton.StartHost();
 
         currentLobby = lobby;
         isLobbyHost = true;
@@ -169,9 +169,9 @@ public class UnityServicesManager : MonoBehaviour {
                     {
                         "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, UserDataManager.Instance.userEmail) //using email for now
                     },
-                    {
-                        "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
-                    }
+                    // {
+                    //     "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
+                    // }
                 }
             }
         };
@@ -192,9 +192,9 @@ public class UnityServicesManager : MonoBehaviour {
                     {
                         "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, UserDataManager.Instance.userEmail) //using email for now
                     },
-                    {
-                        "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
-                    }
+                    // {
+                    //     "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
+                    // }
                 }
             }
         };
@@ -203,11 +203,11 @@ public class UnityServicesManager : MonoBehaviour {
 
         currentLobby = lobby;
         
-        var a = await RelayService.Instance.JoinAllocationAsync(lobby.Data["RelayCode"].Value);
-        // Configure transport
-        NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData, a.HostConnectionData);
-        // Start client
-        NetworkManager.Singleton.StartClient();
+        // var a = await RelayService.Instance.JoinAllocationAsync(lobby.Data["RelayCode"].Value);
+        // // Configure transport
+        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData, a.HostConnectionData);
+        // // Start client
+        // NetworkManager.Singleton.StartClient();
     }
 
     public async Task<List<Lobby>> QueryLobbies() {
