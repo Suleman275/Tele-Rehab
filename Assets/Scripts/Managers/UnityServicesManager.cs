@@ -11,6 +11,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class UnityServicesManager : MonoBehaviour {
@@ -40,7 +41,7 @@ public class UnityServicesManager : MonoBehaviour {
     }
 
     private void Update() {
-        HandleLobbyPollForUpdates();
+        //HandleLobbyPollForUpdates();
     }
 
     //test code
@@ -83,26 +84,31 @@ public class UnityServicesManager : MonoBehaviour {
         NetworkManager.Singleton.StartClient();
     }
     
-    private async void HandleLobbyPollForUpdates() {
-        if (currentLobby != null) {
-            lobbyPollTimer -= Time.deltaTime;
-
-            if (lobbyPollTimer < 0) {
-                lobbyPollTimer = 2;
-
-                var updatedLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-
-                if (updatedLobby.Players.Count > currentLobby.Players.Count) {
-                    currentLobby = updatedLobby;
-                    MigrateHost();
-                    OnPlayerJoinedLobby?.Invoke();
-                }
-                else {
-                    currentLobby = updatedLobby;
-                }
-            }
-        }
-    }
+    // private async void HandleLobbyPollForUpdates() {
+    //     if (currentLobby != null) {
+    //         lobbyPollTimer -= Time.deltaTime;
+    //
+    //         if (lobbyPollTimer < 0) {
+    //             lobbyPollTimer = 2;
+    //
+    //             var updatedLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
+    //
+    //             if (updatedLobby.Players.Count > currentLobby.Players.Count) {
+    //                 currentLobby = updatedLobby;
+    //                 MigrateHost();
+    //                 OnPlayerJoinedLobby?.Invoke();
+    //             }
+    //             // else if (updatedLobby.Data != currentLobby.Data) {
+    //             //     currentLobby = updatedLobby;
+    //             //     print("Lobby data changed");
+    //             //     print(currentLobby.Data["HostShouldStart"].Value);
+    //             // }
+    //             else {
+    //                 currentLobby = updatedLobby;
+    //             }
+    //         }
+    //     }
+    // }
 
     public async Task CreateLobby() {
         if (!AuthenticationService.Instance.IsSignedIn) {
@@ -130,6 +136,8 @@ public class UnityServicesManager : MonoBehaviour {
         print("Lobby created " + currentLobby.LobbyCode);
         
         StartCoroutine(HeartbeatLobbyCoroutine(currentLobby.Id, 15));
+        
+        SubscribeToLobbyEvents();
     }
     
     private IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds) {
@@ -162,6 +170,8 @@ public class UnityServicesManager : MonoBehaviour {
         try {
             currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, options);
             print("joined lobby");
+
+            SubscribeToLobbyEvents();
         }
         catch (LobbyServiceException e) {
             Debug.Log(e);
@@ -178,5 +188,44 @@ public class UnityServicesManager : MonoBehaviour {
         catch (LobbyServiceException e) {
             print(e);
         }
+    }
+
+    public async void SetPlayerData(string numOfBalls, string wallHeight) {
+        var options = new UpdatePlayerOptions() {
+            Data = new Dictionary<string, PlayerDataObject>() {
+                {
+                    "NumOfBalls", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, numOfBalls)
+                },
+                {
+                    "WallHeight", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, wallHeight)
+                },
+            }
+        };
+        
+        currentLobby = await LobbyService.Instance.UpdatePlayerAsync(currentLobby.Id, AuthenticationService.Instance.PlayerId, options);
+        
+        print("player data updated");
+    }
+
+    private async void SubscribeToLobbyEvents() {
+        var callbacks = new LobbyEventCallbacks();
+
+        callbacks.PlayerJoined += list => {
+            OnPlayerJoinedLobby?.Invoke();
+        };
+        callbacks.DataChanged += values => {
+            print("Data changed");
+        };
+        callbacks.LobbyChanged += changes => {
+            print("updating lobby");
+            changes.ApplyToLobby(currentLobby);
+        };
+        callbacks.PlayerDataChanged += dictionary => {
+            print("Player data changed");
+        };
+        
+        await Lobbies.Instance.SubscribeToLobbyEventsAsync(currentLobby.Id, callbacks);
+        
+        print("subscribed to lobby events");
     }
 }

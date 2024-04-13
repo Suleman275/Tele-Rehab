@@ -25,7 +25,8 @@ public class DoctorLobbyPage : MiniPage {
         btn.clicked += () => {
             // OnlineGameManager.Instance.SetGameData(ballsDD.value, wallDD.value);
             // UnityServicesManager.Instance.TogglePlayerReadyOwn();
-            //OnlineGameManager.Instance.TempSetDataAndStartHost(ballsDD.value, wallDD.value);
+            // OnlineGameManager.Instance.TempSetDataAndStartHost(ballsDD.value, wallDD.value);
+            UnityServicesManager.Instance.SetPlayerData(ballsDD.value, wallDD.value);
         };
     }
 }
