@@ -10,6 +10,7 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UnityServicesManager : MonoBehaviour {
@@ -21,10 +22,6 @@ public class UnityServicesManager : MonoBehaviour {
     private float lobbyPollTimer;
 
     public Action OnPlayerJoinedLobby;
-    public Action OnPlayerDataUpdated;
-    public Action OnBothPlayersReady;
-    public Action OnHostShouldStart;
-    public Action OnClientShouldStart;
 
     private async void Awake() {
         Instance = this;
@@ -105,5 +102,47 @@ public class UnityServicesManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public async Task CreateLobby() {
+        if (!AuthenticationService.Instance.IsSignedIn) {
+            //If not already logged, log the user in
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
+        
+        int maxPlayers = 2;
+        CreateLobbyOptions options = new CreateLobbyOptions() {
+            IsPrivate = false,
+            Player = new Player(
+                data: new Dictionary<string, PlayerDataObject>() { 
+                    {
+                        "Username", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, UserDataManager.Instance.userEmail) 
+                    },
+                    {
+                        "PlayerId", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, UserDataManager.Instance.userId)
+                    }
+                }
+            ) 
+        };
+
+        currentLobby = await LobbyService.Instance.CreateLobbyAsync(UserDataManager.Instance.userEmail, maxPlayers, options);
+        
+        print("Lobby created " + currentLobby.LobbyCode);
+        
+        StartCoroutine(HeartbeatLobbyCoroutine(currentLobby.Id, 15));
+    }
+    
+    private IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds) {
+        var delay = new WaitForSecondsRealtime(waitTimeSeconds);
+
+        while (true) {
+            LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
+            yield return delay;
+        }
+    }
+
+    public async Task<List<Lobby>> QueryLobbies() {
+        QueryResponse lobbies = await Lobbies.Instance.QueryLobbiesAsync();
+        return lobbies.Results;
     }
 }

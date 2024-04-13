@@ -34,7 +34,7 @@ public class OnlineGameManager : MonoBehaviour {
         onlineGameUI.setCodeLabel(joinCode);
     }
     
-    public async void StartClient(string joinCode) {
+    public void StartClient(string joinCode) {
         onlineGameEnv.SetActive(true);
         onlineGameUI.setCodeLabel(joinCode);
         UnityServicesManager.Instance.StartClientWithRelay(joinCode);

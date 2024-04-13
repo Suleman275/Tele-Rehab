@@ -31,11 +31,11 @@ public class TestPatDash : MiniPage {
             OnlineGameManager.Instance.StartClient(codeTf.value);
         };
 
-        // var createLobbyBtn = CreateAndAddElement<Button>();
-        // createLobbyBtn.text = "Create Lobby";
-        // createLobbyBtn.clicked += () => {
-        //     router.Navigate(this, "LobbyPage");
-        // };
+        var createLobbyBtn = CreateAndAddElement<Button>();
+        createLobbyBtn.text = "Create Lobby";
+        createLobbyBtn.clicked += () => {
+            router.Navigate(this, "LobbyPage");
+        };
         //
         // var listLobbiesPage = CreateAndAddElement<Button>();
         // listLobbiesPage.text = "List Lobbies";
