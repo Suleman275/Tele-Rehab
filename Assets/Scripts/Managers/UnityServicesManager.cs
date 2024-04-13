@@ -19,8 +19,6 @@ public class UnityServicesManager : MonoBehaviour {
     private bool isLobbyHost;
     
     private float lobbyPollTimer;
-    
-    
 
     public Action OnPlayerJoinedLobby;
     public Action OnPlayerDataUpdated;
@@ -107,115 +105,5 @@ public class UnityServicesManager : MonoBehaviour {
                 }
             }
         }
-    }
-
-    public async Task CreateLobbyAndStartHost() {
-        if (!AuthenticationService.Instance.IsSignedIn) {
-            //If not already logged, log the user in
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-        
-        // Allocation a = await RelayService.Instance.CreateAllocationAsync(2);
-        // var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
-        
-
-        var options = new CreateLobbyOptions() {
-            IsPrivate = false,
-            // Data = new Dictionary<string, DataObject>() {
-            //     {
-            //         "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode)
-            //     }
-            // },
-            Player = new Player() {
-                Data = new Dictionary<string, PlayerDataObject>() {
-                    {
-                        "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, UserDataManager.Instance.userEmail) //using email for now
-                    },
-                    // {
-                    //     "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
-                    // }
-                }
-            }
-        };
-
-        var lobby = await Lobbies.Instance.CreateLobbyAsync(UserDataManager.Instance.userEmail, 2, options);
-
-        StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
-        
-        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
-        // NetworkManager.Singleton.StartHost();
-
-        currentLobby = lobby;
-        isLobbyHost = true;
-    }
-
-    private IEnumerator HeartbeatLobbyCoroutine(string lobbyId, float waitTimeSeconds) {
-        var delay = new WaitForSeconds(waitTimeSeconds);
-
-        while (true) {
-            Lobbies.Instance.SendHeartbeatPingAsync(lobbyId);
-            yield return delay;
-        }
-    }
-
-    public async Task JoinLobby(string lobbyId) {
-        if (!AuthenticationService.Instance.IsSignedIn) {
-            //If not already logged, log the user in
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-        var joinLobbyOptions = new JoinLobbyByIdOptions() {
-            Player = new Player() {
-                Data = new Dictionary<string, PlayerDataObject>() {
-                    {
-                        "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, UserDataManager.Instance.userEmail) //using email for now
-                    },
-                    // {
-                    //     "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
-                    // }
-                }
-            }
-        };
-        var lobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, joinLobbyOptions);
-
-        currentLobby = lobby;
-    }
-    
-    public async Task JoinLobbyAndStartClient(string lobbyId) {
-        if (!AuthenticationService.Instance.IsSignedIn) {
-            //If not already logged, log the user in
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-        
-        var joinLobbyOptions = new JoinLobbyByIdOptions() {
-            Player = new Player() {
-                Data = new Dictionary<string, PlayerDataObject>() {
-                    {
-                        "UserName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, UserDataManager.Instance.userEmail) //using email for now
-                    },
-                    // {
-                    //     "isReady", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, "No")
-                    // }
-                }
-            }
-        };
-        
-        var lobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, joinLobbyOptions);
-
-        currentLobby = lobby;
-        
-        // var a = await RelayService.Instance.JoinAllocationAsync(lobby.Data["RelayCode"].Value);
-        // // Configure transport
-        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData, a.HostConnectionData);
-        // // Start client
-        // NetworkManager.Singleton.StartClient();
-    }
-
-    public async Task<List<Lobby>> QueryLobbies() {
-        if (!AuthenticationService.Instance.IsSignedIn) {
-            //If not already logged, log the user in
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-        QueryResponse lobbies = await Lobbies.Instance.QueryLobbiesAsync();
-        return lobbies.Results;
     }
 }
