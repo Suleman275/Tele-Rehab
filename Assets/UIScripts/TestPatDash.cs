@@ -17,21 +17,15 @@ public class TestPatDash : MiniPage {
         var playHostBtn = CreateAndAddElement<Button>();
         playHostBtn.text = "NetCode Test Host";
         playHostBtn.clicked += () => {
-            enabled = false;
+            router.Navigate(this, "OnlinePreGamePage");
             NetworkManager.Singleton.StartHost();
         };
 
         var playClientBtn = CreateAndAddElement<Button>();
         playClientBtn.text = "NetCode Test Client";
         playClientBtn.clicked += () => {
-            enabled = false;
+            router.Navigate(this, "OnlinePreGamePage");
             NetworkManager.Singleton.StartClient();
         };
-
-        var createRelayBtn = CreateAndAddElement<Button>();
-        createRelayBtn.text = "Create relay";
-        createRelayBtn.clicked += () => { };
-        
-        
     }
 }
