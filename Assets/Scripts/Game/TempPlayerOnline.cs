@@ -6,22 +6,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class TempPlayerOnline : NetworkBehaviour {
-    [SerializeField] private GameObject hands;
+    public static TempPlayerOnline LocalInstance;
 
-    public NetworkVariable<bool> isReady = new NetworkVariable<bool>(false);
-    
     public override void OnNetworkSpawn() {
-        if (!IsOwner) {
-            Destroy(this);
-            return;
+        if (IsOwner) {
+            LocalInstance = this;
         }
-        
-        print("Player spawned: " + UserDataManager.Instance.userRole);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void TogglePlayerReadyServerRPC() {
-        isReady.Value = !isReady.Value;
-        OnlineGameManager.Instance.SetPatientReadyStatusServerRPC(isReady.Value);
+        else {
+            Destroy(this);
+        }
     }
 }

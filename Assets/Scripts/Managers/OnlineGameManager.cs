@@ -6,33 +6,56 @@ using Unity.Netcode;
 using UnityEngine;
 
 public class OnlineGameManager : NetworkBehaviour {
+    [SerializeField] private GameObject onlineGameEnv;
+    
     public static OnlineGameManager Instance;
 
     public NetworkVariable<bool> isPatientReady = new NetworkVariable<bool>(false);
     public NetworkVariable<bool> isDoctorReady = new NetworkVariable<bool>(false);
+    public NetworkVariable<bool> hasGameStarted = new NetworkVariable<bool>(false);
+    public NetworkVariable<int> numOfBalls = new NetworkVariable<int>(0);
+    public NetworkVariable<int> wallHeight = new NetworkVariable<int>(0);
     
     private void Awake() {
         Instance = this;
     }
 
+    private void Update() {
+        if (!hasGameStarted.Value) {
+            HandleGameStart();
+        }
+    }
+
     [ServerRpc(RequireOwnership = false)]
-    public void SetPatientReadyStatusServerRPC(bool value) {
-        isPatientReady.Value = value;
-        CheckBothPlayersReady();
+    public void TogglePatientReadyServerRPC() {
+        isPatientReady.Value = !isPatientReady.Value;
+        print("patient ready: " + isPatientReady.Value);
     }
     
     [ServerRpc(RequireOwnership = false)]
-    public void SetDoctorReadyStatusServerRPC(bool value) {
-        isDoctorReady.Value = value;
-        CheckBothPlayersReady();
+    public void ToggleDoctorReadyServerRPC() {
+        isDoctorReady.Value = !isDoctorReady.Value;
+        print("doctor ready: " + isDoctorReady.Value);
     }
 
-    private void CheckBothPlayersReady() {
-        if (isPatientReady.Value && isDoctorReady.Value) {
-            print("both Players ready");
+    private void HandleGameStart() {
+        if (IsServer) {
+            if (isPatientReady.Value && isDoctorReady.Value) {
+                hasGameStarted.Value = true;
+                StartGameClientRPC();
+            }
         }
-        else {
-            print("both not ready");
-        }
+    }
+
+    [ClientRpc]
+    public void StartGameClientRPC() {
+        print("Game starting");
+        onlineGameEnv.SetActive(true);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetGameDataServerRPC(int numOfBalls, int wallHeight) {
+        this.numOfBalls.Value = numOfBalls;
+        this.wallHeight.Value = wallHeight;
     }
 }

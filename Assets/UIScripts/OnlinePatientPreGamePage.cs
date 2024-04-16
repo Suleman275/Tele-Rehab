@@ -4,15 +4,16 @@ using MiniUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class OnlinePreGamePage : MiniPage {
-    [SerializeField] private TempPlayerOnline player;
+public class OnlinePatientPreGamePage : MiniPage {
     protected override void RenderPage() {
-        CreateAndAddElement<Label>().text = "Pre game page";
+        CreateAndAddElement<Label>().text = "Patient Pre Game Page";
 
         var readyBtn = CreateAndAddElement<Button>();
         readyBtn.text = "Ready?";
         readyBtn.clicked += () => {
-            player.TogglePlayerReadyServerRPC();
+            if (TempPlayerOnline.LocalInstance != null) {
+                OnlineGameManager.Instance.TogglePatientReadyServerRPC();
+            }
         };
     }
 }
