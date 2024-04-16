@@ -46,7 +46,7 @@ public class OnlineGameManager : NetworkBehaviour {
         if (IsServer) {
             if (isPatientReady.Value && isDoctorReady.Value) {
                 hasGameStarted.Value = true;
-                StartGameClientRPC();
+                StartGameClientRPC(wallHeight.Value);
                 
                 onlineBallSpawner.SpawnBalls(numOfBalls.Value);
             }
@@ -54,11 +54,11 @@ public class OnlineGameManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void StartGameClientRPC() {
+    public void StartGameClientRPC(int wallHeight) {
         print("Game starting");
         OnGameStarted?.Invoke();
         onlineGameEnv.SetActive(true);
-        onlineMiddleWall.SetWallHeight(wallHeight.Value);
+        OnlineMiddleWall.Instance.SetWallHeight(wallHeight);
     }
 
     [ServerRpc(RequireOwnership = false)]
