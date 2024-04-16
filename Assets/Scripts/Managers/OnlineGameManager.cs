@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class OnlineGameManager : NetworkBehaviour {
     [SerializeField] private GameObject onlineGameEnv;
+    [SerializeField] private OnlineMiddleWall onlineMiddleWall;
     
     public static OnlineGameManager Instance;
 
@@ -51,6 +52,7 @@ public class OnlineGameManager : NetworkBehaviour {
     public void StartGameClientRPC() {
         print("Game starting");
         onlineGameEnv.SetActive(true);
+        onlineMiddleWall.SetWallHeight(wallHeight.Value);
     }
 
     [ServerRpc(RequireOwnership = false)]

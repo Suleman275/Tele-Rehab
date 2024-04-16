@@ -134,7 +134,8 @@ GameObject:
   - component: {fileID: 32833120}
   - component: {fileID: 32833123}
   - component: {fileID: 32833122}
-  - component: {fileID: 32833121}
+  - component: {fileID: 32833124}
+  - component: {fileID: 32833125}
   m_Layer: 0
   m_Name: MiddleWall
   m_TagString: Untagged
@@ -157,18 +158,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2063887135}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &32833121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 32833119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0fb4dd17924abc42857d6380c0b6d3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &32833122
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -266,6 +255,39 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &32833124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 32833119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2183246410
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &32833125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 32833119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2d516a7fa6820e4693b2a9cf4eb13bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &56721605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,9 +1104,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onlineGameEnv: {fileID: 2063887134}
+  onlineMiddleWall: {fileID: 32833125}
   isPatientReady:
     m_InternalValue: 0
   isDoctorReady:
+    m_InternalValue: 0
+  hasGameStarted:
+    m_InternalValue: 0
+  numOfBalls:
+    m_InternalValue: 0
+  wallHeight:
     m_InternalValue: 0
 --- !u!1 &1075947181
 GameObject:
