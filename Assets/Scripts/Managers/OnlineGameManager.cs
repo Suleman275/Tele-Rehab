@@ -8,6 +8,7 @@ using UnityEngine;
 public class OnlineGameManager : NetworkBehaviour {
     [SerializeField] private GameObject onlineGameEnv;
     [SerializeField] private OnlineMiddleWall onlineMiddleWall;
+    [SerializeField] private OnlineBallSpawner onlineBallSpawner;
     
     public static OnlineGameManager Instance;
 
@@ -44,6 +45,10 @@ public class OnlineGameManager : NetworkBehaviour {
             if (isPatientReady.Value && isDoctorReady.Value) {
                 hasGameStarted.Value = true;
                 StartGameClientRPC();
+                
+                print("trying to spawn");
+                onlineBallSpawner.SpawnBalls(numOfBalls.Value);
+                print("tried");
             }
         }
     }
