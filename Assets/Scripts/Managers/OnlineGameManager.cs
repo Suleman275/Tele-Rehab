@@ -1,38 +1,38 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;using Unity.Netcode;
+using System.Collections.Generic;
+using System.Net.Http.Headers;
+using Unity.Netcode;
 using UnityEngine;
 
 public class OnlineGameManager : NetworkBehaviour {
     public static OnlineGameManager Instance;
 
-    public Dictionary<ulong, bool> playerReadyDictionary;
+    public NetworkVariable<bool> isPatientReady = new NetworkVariable<bool>(false);
+    public NetworkVariable<bool> isDoctorReady = new NetworkVariable<bool>(false);
     
     private void Awake() {
         Instance = this;
-
-        playerReadyDictionary = new Dictionary<ulong, bool>();
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void printClientIDServerRPC(ServerRpcParams serverRpcParams = default) {
-        print(serverRpcParams.Receive.SenderClientId);
+    public void SetPatientReadyStatusServerRPC(bool value) {
+        isPatientReady.Value = value;
+        CheckBothPlayersReady();
     }
-
+    
     [ServerRpc(RequireOwnership = false)]
-    public void readyPlayerServerRPC(ServerRpcParams serverRpcParams = default) {
-        playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
-        
-        print("client " + serverRpcParams.Receive.SenderClientId + " is ready");
-        print("both players ready: " + CheckBothPlayersReady());
+    public void SetDoctorReadyStatusServerRPC(bool value) {
+        isDoctorReady.Value = value;
+        CheckBothPlayersReady();
     }
 
-    private bool CheckBothPlayersReady() {
-        if (playerReadyDictionary.Keys.Count > 1) {
-            return playerReadyDictionary[0] == true && playerReadyDictionary[1] == true;
+    private void CheckBothPlayersReady() {
+        if (isPatientReady.Value && isDoctorReady.Value) {
+            print("both Players ready");
         }
         else {
-            return false;
+            print("both not ready");
         }
     }
 }
