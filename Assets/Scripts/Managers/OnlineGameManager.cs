@@ -57,5 +57,6 @@ public class OnlineGameManager : NetworkBehaviour {
     public void SetGameDataServerRPC(int numOfBalls, int wallHeight) {
         this.numOfBalls.Value = numOfBalls;
         this.wallHeight.Value = wallHeight;
+        print("game data set");
     }
 }
