@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class OnlineDoctorPreGamePage : MiniPage {
     protected override void RenderPage() {
+        OnlineGameManager.Instance.OnGameStarted += () => enabled = false;
+        
         CreateAndAddElement<Label>().text = "Doctor Pre Game Page";
         
         var ballsDD = CreateAndAddElement<DropdownField>();

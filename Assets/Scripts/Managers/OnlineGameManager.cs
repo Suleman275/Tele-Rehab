@@ -17,6 +17,8 @@ public class OnlineGameManager : NetworkBehaviour {
     public NetworkVariable<bool> hasGameStarted = new NetworkVariable<bool>(false);
     public NetworkVariable<int> numOfBalls = new NetworkVariable<int>(0);
     public NetworkVariable<int> wallHeight = new NetworkVariable<int>(0);
+
+    public Action OnGameStarted;
     
     private void Awake() {
         Instance = this;
@@ -46,9 +48,7 @@ public class OnlineGameManager : NetworkBehaviour {
                 hasGameStarted.Value = true;
                 StartGameClientRPC();
                 
-                print("trying to spawn");
                 onlineBallSpawner.SpawnBalls(numOfBalls.Value);
-                print("tried");
             }
         }
     }
@@ -56,6 +56,7 @@ public class OnlineGameManager : NetworkBehaviour {
     [ClientRpc]
     public void StartGameClientRPC() {
         print("Game starting");
+        OnGameStarted?.Invoke();
         onlineGameEnv.SetActive(true);
         onlineMiddleWall.SetWallHeight(wallHeight.Value);
     }

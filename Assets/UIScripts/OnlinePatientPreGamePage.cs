@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class OnlinePatientPreGamePage : MiniPage {
     protected override void RenderPage() {
+        OnlineGameManager.Instance.OnGameStarted += () => enabled = false;
+        
         CreateAndAddElement<Label>().text = "Patient Pre Game Page";
 
         var readyBtn = CreateAndAddElement<Button>();
