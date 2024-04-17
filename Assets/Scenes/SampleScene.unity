@@ -543,6 +543,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showPreview: 0
+  testDocDash: {fileID: 480627468}
+  testPatDash: {fileID: 480627467}
+  gameEnv: {fileID: 2063887134}
 --- !u!1 &480627461
 GameObject:
   m_ObjectHideFlags: 0

@@ -61,7 +61,8 @@ public class OnlineGameManager : NetworkBehaviour {
         print("Game starting");
         OnGameStarted?.Invoke();
         onlineGameEnv.SetActive(true);
-        OnlineMiddleWall.Instance.SetWallHeight(wallHeight);
+        onlineMiddleWall.SetWallHeight(wallHeight);
+        onlineGameUI.enabled = true;
         onlineGameUI.SetBallCounterText($"Balls Completed {completedBalls} / {totalBalls}");
     }
 
