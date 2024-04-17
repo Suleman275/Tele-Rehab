@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 public class OnlineGameUI : MiniPage {
     private Label ballCounterLabel;
     protected override void RenderPage() {
+        SetupEvents();
+        
         ballCounterLabel = CreateAndAddElement<Label>();
     }
 
@@ -34,6 +36,13 @@ public class OnlineGameUI : MiniPage {
         exitBtn.clicked += () => {
             // enabled = false;
             // OfflineGameManager.Instance.ExitGame();
+        };
+    }
+
+    private void SetupEvents() {
+        OnlineGameManager.Instance.OnGameStarted += () => {
+            _root.Clear();
+            ballCounterLabel = CreateAndAddElement<Label>();
         };
     }
 }

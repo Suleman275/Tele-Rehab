@@ -79,9 +79,11 @@ public class OnlineGameManager : NetworkBehaviour {
         NotifyClientsClientRPC(numOfCompletedBalls, numOfBalls.Value);
 
         if (numOfCompletedBalls == numOfBalls.Value) {
+            
             isDoctorReady.Value = false;
             isPatientReady.Value = false;
             hasGameStarted.Value = false;
+            numOfCompletedBalls = 0;
             
             ShowGameCompletedUIClientRPC();
         }
