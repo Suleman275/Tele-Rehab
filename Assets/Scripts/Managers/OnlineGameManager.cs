@@ -9,6 +9,7 @@ public class OnlineGameManager : NetworkBehaviour {
     [SerializeField] private GameObject onlineGameEnv;
     [SerializeField] private OnlineMiddleWall onlineMiddleWall;
     [SerializeField] private OnlineBallSpawner onlineBallSpawner;
+    [SerializeField] private OnlineGameUI onlineGameUI;
     
     public static OnlineGameManager Instance;
 
@@ -17,6 +18,8 @@ public class OnlineGameManager : NetworkBehaviour {
     public NetworkVariable<bool> hasGameStarted = new NetworkVariable<bool>(false);
     public NetworkVariable<int> numOfBalls = new NetworkVariable<int>(0);
     public NetworkVariable<int> wallHeight = new NetworkVariable<int>(0);
+
+    private int numOfCompletedBalls;
 
     public Action OnGameStarted;
     
@@ -46,7 +49,7 @@ public class OnlineGameManager : NetworkBehaviour {
         if (IsServer) {
             if (isPatientReady.Value && isDoctorReady.Value) {
                 hasGameStarted.Value = true;
-                StartGameClientRPC(wallHeight.Value);
+                StartGameClientRPC(wallHeight.Value, numOfCompletedBalls, numOfBalls.Value);
                 
                 onlineBallSpawner.SpawnBalls(numOfBalls.Value);
             }
@@ -54,11 +57,12 @@ public class OnlineGameManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void StartGameClientRPC(int wallHeight) {
+    public void StartGameClientRPC(int wallHeight, int completedBalls, int totalBalls) {
         print("Game starting");
         OnGameStarted?.Invoke();
         onlineGameEnv.SetActive(true);
         OnlineMiddleWall.Instance.SetWallHeight(wallHeight);
+        onlineGameUI.SetBallCounterText($"Balls Completed {completedBalls} / {totalBalls}");
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -66,5 +70,30 @@ public class OnlineGameManager : NetworkBehaviour {
         this.numOfBalls.Value = numOfBalls;
         this.wallHeight.Value = wallHeight;
         print("game data set");
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void BallCompletedServerRPC() {
+        print("Ball Completed");
+        this.numOfCompletedBalls++;
+        NotifyClientsClientRPC(numOfCompletedBalls, numOfBalls.Value);
+
+        if (numOfCompletedBalls == numOfBalls.Value) {
+            isDoctorReady.Value = false;
+            isPatientReady.Value = false;
+            hasGameStarted.Value = false;
+            
+            ShowGameCompletedUIClientRPC();
+        }
+    }
+
+    [ClientRpc]
+    private void NotifyClientsClientRPC(int newCount, int oldCount) {
+        onlineGameUI.SetBallCounterText($"Balls Completed {newCount} / {oldCount}");
+    }
+
+    [ClientRpc]
+    private void ShowGameCompletedUIClientRPC() {
+        onlineGameUI.ShowGameCompletedUI();
     }
 }
