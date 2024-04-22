@@ -2,6 +2,7 @@ using MiniUI;
 using Unity.Netcode;
 using UnityEngine.UIElements;
 
+
 public class TestPatDash : MiniPage {
     protected override void RenderPage() {
         var router = GetComponent<MiniComponentRouter>();
@@ -17,7 +18,8 @@ public class TestPatDash : MiniPage {
         var playHostBtn = CreateAndAddElement<Button>();
         playHostBtn.text = "NetCode Test Host";
         playHostBtn.clicked += () => {
-            NetworkManager.Singleton.StartHost();
+            //NetworkManager.Singleton.StartHost();
+            UnityServicesManager.Instance.StartHost();
             router.Navigate(this, "OnlinePatientPreGamePage");
         };
     }
