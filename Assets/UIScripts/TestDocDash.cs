@@ -18,7 +18,8 @@ public class TestDocDash : MiniPage {
         playClientBtn.text = "NetCode Test Client";
         playClientBtn.clicked += () => {
             //NetworkManager.Singleton.StartClient();
-            UnityServicesManager.Instance.StartClient(codeTf.value);
+            //UnityServicesManager.Instance.StartClient(codeTf.value);            
+            UnityServicesManager.Instance.JoinLobbyByID(codeTf.value);
             router.Navigate(this, "OnlineDoctorPreGamePage");
         };
     }

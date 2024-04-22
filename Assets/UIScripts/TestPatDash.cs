@@ -19,7 +19,9 @@ public class TestPatDash : MiniPage {
         playHostBtn.text = "NetCode Test Host";
         playHostBtn.clicked += () => {
             //NetworkManager.Singleton.StartHost();
-            UnityServicesManager.Instance.StartHost();
+            //UnityServicesManager.Instance.StartHost();
+            UnityServicesManager.Instance.CreateLobby();
+
             router.Navigate(this, "OnlinePatientPreGamePage");
         };
     }
