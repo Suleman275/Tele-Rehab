@@ -13,7 +13,7 @@ public class OnlinePatientPreGamePage : MiniPage {
         var readyBtn = CreateAndAddElement<Button>();
         readyBtn.text = "Ready?";
         readyBtn.clicked += () => {
-            if (TempPlayerOnline.LocalInstance != null) {
+            if (OnlinePlayer.LocalInstance != null) {
                 OnlineGameManager.Instance.TogglePatientReadyServerRPC();
             }
         };

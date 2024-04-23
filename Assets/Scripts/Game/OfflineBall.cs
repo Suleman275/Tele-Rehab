@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class OfflineBall : MonoBehaviour {
     public bool isCompleted;
-    private TempHandOffline holdingHand;
+    private Hand holdingHand;
 
     private void Update() {
         if (holdingHand) {
@@ -13,7 +13,7 @@ public class OfflineBall : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (!isCompleted) {
-            if (other.gameObject.TryGetComponent<TempHandOffline>(out TempHandOffline hand) && !hand.hasBall) { //if collided with hand and hand does not have a ball
+            if (other.gameObject.TryGetComponent<Hand>(out Hand hand) && !hand.hasBall) { //if collided with hand and hand does not have a ball
                 hand.hasBall = true;
                 holdingHand = hand;
             }
@@ -25,10 +25,12 @@ public class OfflineBall : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        isCompleted = true;
-        holdingHand.hasBall = false;
-        holdingHand = null;
-        
-        OfflineGameManager.Instance.BallCompleted();
+        if (holdingHand != null) {
+            isCompleted = true;
+            holdingHand.hasBall = false;
+            holdingHand = null;
+
+            OfflineGameManager.Instance.BallCompleted();
+        }
     }
 }

@@ -27,7 +27,7 @@ public class OnlineDoctorPreGamePage : MiniPage {
         var readyBtn = CreateAndAddElement<Button>();
         readyBtn.text = "Ready?";
         readyBtn.clicked += () => {
-            if (TempPlayerOnline.LocalInstance != null) {
+            if (OnlinePlayer.LocalInstance != null) {
                 OnlineGameManager.Instance.SetGameDataServerRPC(int.Parse(ballsDD.value), int.Parse(wallDD.value));
                 OnlineGameManager.Instance.ToggleDoctorReadyServerRPC();
             }

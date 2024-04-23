@@ -41,7 +41,8 @@ public class LoginPage : MiniPage {
     private void SetupEvents() {
         APIManager.Instance.UserSignedIn += model => {
             if (model.role == "Patient") {
-                router.Navigate(this, "TestPatDash");    
+                router.Navigate(this, "TestPatDash");
+                AstraManager.Instance.StartBodyStream();
             }
             else {
                 router.Navigate(this, "TestDocDash");

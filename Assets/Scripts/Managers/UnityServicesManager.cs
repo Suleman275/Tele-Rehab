@@ -39,29 +39,6 @@ public class UnityServicesManager : MonoBehaviour {
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
-    //test
-    public async void StartHost() {
-        if (AuthenticationService.Instance.IsSignedIn) {
-            Allocation a = await RelayService.Instance.CreateAllocationAsync(2);
-            relayJoinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
-
-            transport.SetHostRelayData(a.RelayServer.IpV4, (ushort) a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData);
-
-            NetworkManager.Singleton.StartHost();
-        }
-    }
-
-    // test
-    public async void StartClient(string joinCode) {
-        if (AuthenticationService.Instance.IsSignedIn) {
-            JoinAllocation a = await RelayService.Instance.JoinAllocationAsync(joinCode);
-
-            transport.SetClientRelayData(a.RelayServer.IpV4, (ushort)a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData, a.HostConnectionData);
-            
-            NetworkManager.Singleton.StartClient();
-        }
-    }
-
     public async void CreateLobby() {
         if (AuthenticationService.Instance.IsSignedIn) {
             Allocation a = await RelayService.Instance.CreateAllocationAsync(2);
