@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: c1c961cbd00909b45b34d97fd7df5cbf, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.005982359, g: 0.060136255, b: 0.19507308, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -768,7 +768,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e8690622631054998ee5d0b3ce0da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showPreview: 0
+  showPreview: 1
+  styles: {fileID: 7433441132597879392, guid: 4922dc9ede1e0ad419365d254e9209fc, type: 3}
+  doctorImage: {fileID: 2800000, guid: 5d3578ed2648c504c8c7ae39d23c19c1, type: 3}
 --- !u!114 &480627463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,7 +991,7 @@ Camera:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
