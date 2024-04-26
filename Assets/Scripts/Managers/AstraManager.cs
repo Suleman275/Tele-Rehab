@@ -28,4 +28,8 @@ public class AstraManager : MonoBehaviour {
     public void StartBodyStream() {
         AstraSDKManager.Instance.IsBodyOn = true;
     }
+    
+    public void StopBodyStream() {
+        AstraSDKManager.Instance.IsBodyOn = false;
+    }
 }

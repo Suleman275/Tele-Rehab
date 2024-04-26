@@ -10,7 +10,7 @@ public class OfflineGameManager : MonoBehaviour {
     [SerializeField] private OfflineBallSpawner offlineBallSpawner;
     [SerializeField] private OfflineMiddleWall offlineMiddleWall;
     [SerializeField] private OfflineGameUI offlineGameUI;
-    [SerializeField] private TestPatDash patientDashboard;
+    [SerializeField] private PatientDashboard patientDashboard;
     
     public static OfflineGameManager Instance;
 
@@ -55,6 +55,8 @@ public class OfflineGameManager : MonoBehaviour {
         offlineBallSpawner.ClearChildren();
         offlineGameEnv.SetActive(false);
         
+        //AstraManager.Instance.StopBodyStream();
+
         patientDashboard.enabled = true;
     }
 }

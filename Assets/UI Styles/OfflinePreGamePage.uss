@@ -1,0 +1,39 @@
+:root {
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+	color: white;
+}
+
+DropdownField {
+	width: 80%;
+	margin: 15px;
+	color: black;
+}
+
+.main {
+	border-color: white;
+	border-radius: 12px;
+	border-width: 2px;
+	width: 80%;
+	height: 80%;
+	padding: 10px;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.btn {
+    border-radius: 24px;
+    padding: 20px 40px;
+    background-color: #2ec4b6;
+    color: white;
+    border-width: 0px;
+    -unity-font-style: bold;
+    transition: scale 0.2s linear;
+}
+
+.btn:hover, .btn:focus {
+    background-color: #ff9f1c;
+    scale: 1.1;
+}

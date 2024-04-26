@@ -3,9 +3,13 @@ using MiniUI;
 using UnityEngine;
 
 public class OfflineGameUI : MiniPage {
+    [SerializeField] StyleSheet styles;
+
     private Label ballCounterLabel;
     protected override void RenderPage() {
-        ballCounterLabel = CreateAndAddElement<Label>();
+        AddStyleSheet(styles);
+
+        ballCounterLabel = CreateAndAddElement<Label>("ballCounterLabel");
         ballCounterLabel.text = "Game Started";
     }
 
@@ -18,14 +22,17 @@ public class OfflineGameUI : MiniPage {
 
     public void GameCompleted() {
         _root.Clear();
-        var retryBtn = CreateAndAddElement<Button>();
+
+        var main = CreateAndAddElement<MiniElement>("main");
+
+        var retryBtn = main.CreateAndAddElement<Button>("btn");
         retryBtn.text = "Play Again";
         retryBtn.clicked += () => {
             enabled = false;
             OfflineGameManager.Instance.RestartGame();
         };
 
-        var exitBtn = CreateAndAddElement<Button>();
+        var exitBtn = main.CreateAndAddElement<Button>("btn");
         exitBtn.text = "Exit to Dashboard";
         exitBtn.clicked += () => {
             enabled = false;
