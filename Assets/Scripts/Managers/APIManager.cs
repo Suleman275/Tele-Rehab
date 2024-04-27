@@ -5,7 +5,8 @@ using UnityEngine.Networking; // Import the necessary namespace
 
 public class APIManager : MonoBehaviour {
     public static APIManager Instance;
-    private string baseUrl = "http://localhost:3000"; // Your Express API URL
+    //private string baseUrl = "http://localhost:3000"; // Your Express API URL
+    private string baseUrl = "https://6f6d-94-122-33-91.ngrok-free.app"; // Your Express API URL
     
     //Events
     public Action<UserDataModel> UserSignedIn;

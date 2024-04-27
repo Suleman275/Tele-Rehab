@@ -1,4 +1,4 @@
-using ParrelSync;
+//using ParrelSync;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +13,6 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Services.Vivox;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class UnityServicesManager : MonoBehaviour {
     [SerializeField] UnityTransport transport;
@@ -61,13 +60,14 @@ public class UnityServicesManager : MonoBehaviour {
 
 
     private async void InitServices() {
-        var options = new InitializationOptions();
+//        var options = new InitializationOptions();
 
-#if UNITY_EDITOR
-        options.SetProfile(ClonesManager.IsClone() ? ClonesManager.GetArgument() : "Primary");
-#endif
+//#if UNITY_EDITOR
+//        options.SetProfile(ClonesManager.IsClone() ? ClonesManager.GetArgument() : "Primary");
+//#endif
 
-        await UnityServices.InitializeAsync(options);
+//      await UnityServices.InitializeAsync(options);
+        await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
         await VivoxService.Instance.InitializeAsync();
