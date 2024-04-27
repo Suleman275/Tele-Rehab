@@ -19,7 +19,5 @@ public class ScheduleAppointmentPage : MiniPage {
         btn.clicked += () => {
             APIManager.Instance.TryCreateAppointment(nameTF.value, timeTF.value);
         };
-
-
     }
 }

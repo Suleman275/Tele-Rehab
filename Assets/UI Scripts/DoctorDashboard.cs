@@ -45,7 +45,7 @@ public class DoctorDashboard : MiniPage {
         var scheduleMeetingBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
         scheduleMeetingBtn.text = "Schedule A Meeting";
         scheduleMeetingBtn.clicked += () => {
-            print("to be implemented");
+            router.Navigate(this, "ScheduleAppointmentPage");
         };
     }
 }
