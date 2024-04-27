@@ -11,7 +11,9 @@ using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using Unity.Services.Vivox;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class UnityServicesManager : MonoBehaviour {
     [SerializeField] UnityTransport transport;
@@ -31,7 +33,7 @@ public class UnityServicesManager : MonoBehaviour {
     private void Awake() {
         Instance = this;
 
-        Authenticate();
+        InitServices();
     }
 
     private void Update() {
@@ -58,7 +60,7 @@ public class UnityServicesManager : MonoBehaviour {
     }
 
 
-    private async void Authenticate() {
+    private async void InitServices() {
         var options = new InitializationOptions();
 
 #if UNITY_EDITOR
@@ -67,6 +69,8 @@ public class UnityServicesManager : MonoBehaviour {
 
         await UnityServices.InitializeAsync(options);
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        await VivoxService.Instance.InitializeAsync();
     }
 
     public async void CreateLobby() {
@@ -85,7 +89,7 @@ public class UnityServicesManager : MonoBehaviour {
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync(UserDataManager.Instance.userEmail, 2, options);
 
-            lobbyId = currentLobby.Id;
+            JoinVivoxChannel(currentLobby.Id);
 
             OnLobbyCreated?.Invoke();
 
@@ -119,6 +123,8 @@ public class UnityServicesManager : MonoBehaviour {
 
         currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId, options);
 
+        JoinVivoxChannel(currentLobby.Id);
+
         JoinAllocation a = await RelayService.Instance.JoinAllocationAsync(currentLobby.Data["RelayCode"].Value);
 
         transport.SetClientRelayData(a.RelayServer.IpV4, (ushort)a.RelayServer.Port, a.AllocationIdBytes, a.Key, a.ConnectionData, a.HostConnectionData);
@@ -130,5 +136,27 @@ public class UnityServicesManager : MonoBehaviour {
         QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync();
 
         return queryResponse.Results;
+    }
+
+    public async void LoginVivox() {
+        await VivoxService.Instance.LoginAsync();
+    }
+
+    public async void JoinVivoxChannel(string channelName) {
+        if (VivoxService.Instance.IsLoggedIn) {
+            await VivoxService.Instance.JoinGroupChannelAsync(channelName, ChatCapability.AudioOnly);
+        }
+        else {
+            print("not logged into vivox");
+        }
+    }
+
+    public async void LeaveVivoxChannel() {
+        if (VivoxService.Instance.IsLoggedIn) {
+            await VivoxService.Instance.LeaveChannelAsync(currentLobby.Id);
+        }
+        else {
+            print("not logged into vivox");
+        }
     }
 }

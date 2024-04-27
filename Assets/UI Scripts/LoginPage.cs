@@ -88,6 +88,9 @@ public class LoginPage : MiniPage {
 
     private void SetupEvents() {
         APIManager.Instance.UserSignedIn += model => {
+            //login to vivox as well
+            UnityServicesManager.Instance.LoginVivox();
+
             if (model.role == "Patient") {
                 router.Navigate(this, "PatientDashboard");
                 AstraManager.Instance.StartBodyStream();

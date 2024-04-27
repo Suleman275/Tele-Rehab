@@ -53,6 +53,8 @@ public class OnlineGameUI : MiniPage {
         exitBtn.clicked += () => {
             _root.Clear();
             enabled = false;
+
+            UnityServicesManager.Instance.LeaveVivoxChannel();
             
             NetworkManager.Singleton.Shutdown();
             gameEnv.SetActive(false);
