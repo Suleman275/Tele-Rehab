@@ -10,6 +10,8 @@ public class APIManager : MonoBehaviour {
     //Events
     public Action<UserDataModel> UserSignedIn;
     public Action<String> UserSignInFailed;
+    public Action<String> AppointmentCreationError;
+    public Action AppointmentCreated;
 
     private void Awake() {
         Instance = this;
@@ -73,6 +75,56 @@ public class APIManager : MonoBehaviour {
             else {
                 //Debug.LogError("Error signing in: " + request.error);
                 UserSignInFailed?.Invoke(request.error);
+            }
+        }
+    }
+
+    public void TryCreateAppointment(string name, string time) {
+        AppointmentDataModel data = new AppointmentDataModel {
+            requestSender = UserDataManager.Instance.userEmail,
+            requestSenderRole = UserDataManager.Instance.userRole,
+            appointmentWith = name,
+            time = time,
+        };
+
+        string jsonData = JsonUtility.ToJson(data);
+        StartCoroutine(SendCreateAppointmentRequest(name, jsonData));
+    }
+
+    IEnumerator SendCreateAppointmentRequest(string name, string jsonData) {
+
+        string url = $"{baseUrl}/make-appointment/";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, jsonData, "application/json")) {
+            // Convert the JSON data into a byte array
+            //byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            //webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+            //webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+
+            //// Set the content type to JSON
+            //webRequest.SetRequestHeader("Content-Type", "application/json");
+
+            // Send the request and wait for a response
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result != UnityWebRequest.Result.Success) {
+                Debug.LogError($"Error: {webRequest.error}");
+                AppointmentCreationError?.Invoke(webRequest.error);
+            }
+            else {
+                Debug.Log($"Received: {webRequest.downloadHandler.text}");
+                if (webRequest.downloadHandler.text == "Internal Server Error") {
+                    AppointmentCreationError?.Invoke("Internal Server Error");
+                }
+                else if (webRequest.downloadHandler.text == "That user could not be found") {
+                    AppointmentCreationError?.Invoke("That user could not be found");
+                }
+                else if (webRequest.downloadHandler.text == "not a valid date") {
+                    AppointmentCreationError?.Invoke("Not a valid date");
+                }
+                else {
+                    AppointmentCreated?.Invoke();
+                }
             }
         }
     }

@@ -5,17 +5,47 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class OnlinePatientPreGamePage : MiniPage {
-    protected override void RenderPage() {
-        OnlineGameManager.Instance.OnGameStarted += () => enabled = false;
-        
-        CreateAndAddElement<Label>().text = "Patient Pre Game Page";
+    [SerializeField] StyleSheet styles;
 
-        var readyBtn = CreateAndAddElement<Button>();
+    Label doctorNameLabel;
+    Label lobbyCodeLabel;
+    protected override void RenderPage() {
+        AddStyleSheet(styles);
+
+        SetupEvents();
+
+        var main = CreateAndAddElement<MiniElement>("main");
+
+        var topSection = main.CreateAndAddElement<MiniElement>("top");
+
+        doctorNameLabel = topSection.CreateAndAddElement<Label>();
+        doctorNameLabel.text = "Waiting for Doctor...";
+        
+        lobbyCodeLabel = topSection.CreateAndAddElement<Label>();
+        lobbyCodeLabel.text = "XXXX";
+
+        var middleSection = main.CreateAndAddElement<MiniElement>("middle");
+
+        var bottomSection = main.CreateAndAddElement<MiniElement>("bottom");
+
+        var readyBtn = bottomSection.CreateAndAddElement<Button>("btn");
         readyBtn.text = "Ready?";
         readyBtn.clicked += () => {
             if (OnlinePlayer.LocalInstance != null) {
                 OnlineGameManager.Instance.TogglePatientReadyServerRPC();
             }
+        };
+    }
+
+    private void SetupEvents() {
+        OnlineGameManager.Instance.OnGameStarted += () => enabled = false;
+
+        UnityServicesManager.Instance.OnDoctorJoined += () => {
+            doctorNameLabel.text = UnityServicesManager.Instance.currentLobby.Players[1].Data["PlayerName"].Value + " has joined";
+        };
+
+        UnityServicesManager.Instance.OnLobbyCreated += () => {
+            lobbyCodeLabel.text = UnityServicesManager.Instance.currentLobby.LobbyCode;
         };
     }
 }

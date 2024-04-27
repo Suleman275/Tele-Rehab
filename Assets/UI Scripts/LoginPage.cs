@@ -93,7 +93,7 @@ public class LoginPage : MiniPage {
                 AstraManager.Instance.StartBodyStream();
             }
             else {
-                router.Navigate(this, "TestDocDash");
+                router.Navigate(this, "DoctorDashboard");
             }
         };
 

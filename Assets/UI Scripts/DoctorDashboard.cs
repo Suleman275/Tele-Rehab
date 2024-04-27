@@ -1,10 +1,10 @@
-using MiniUI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MiniUI;
 using UnityEngine.UIElements;
 
-public class PatientDashboard : MiniPage {
+public class DoctorDashboard : MiniPage {
     [SerializeField] StyleSheet styles;
     protected override void RenderPage() {
         AddStyleSheet(styles);
@@ -30,40 +30,22 @@ public class PatientDashboard : MiniPage {
 
         var btnGroup = CreateAndAddElement<MiniElement>("vgroup");
 
-        var practiceBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
-        practiceBtn.text = "Practice";
-        practiceBtn.clicked += () => {
-            router.Navigate(this, "OfflinePreGamePage");
+        var pastSessionsBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
+        pastSessionsBtn.text = "View Past Sessions";
+        pastSessionsBtn.clicked += () => {
+            print("To be implemented");
         };
 
-        var playOnlineBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
-        playOnlineBtn.text = "Play with Doctor";
-        playOnlineBtn.clicked += () => {
-            UnityServicesManager.Instance.CreateLobby();
-            router.Navigate(this, "OnlinePatientPreGamePage");
+        var searchRoomsBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
+        searchRoomsBtn.text = "Search for rooms";
+        searchRoomsBtn.clicked += () => {
+            router.Navigate(this, "AvailableRoomsPage");
         };
 
         var scheduleMeetingBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
         scheduleMeetingBtn.text = "Schedule A Meeting";
         scheduleMeetingBtn.clicked += () => {
-            router.Navigate(this, "ScheduleAppointmentPage");
+            print("to be implemented");
         };
-    }
-}
-
-public class SessionCard : MiniElement {
-    Label dateLabel;
-    Label typeLabel;
-    Label doctorLabel;
-
-    public SessionCard() {
-        dateLabel = CreateAndAddElement<Label>();
-        dateLabel.text = "12th March";
-
-        typeLabel = CreateAndAddElement<Label>();
-        typeLabel.text = "Left Arm";
-
-        doctorLabel = CreateAndAddElement<Label>();
-        doctorLabel.text = "testdoc";
     }
 }

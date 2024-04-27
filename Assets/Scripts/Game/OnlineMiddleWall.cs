@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class OnlineMiddleWall : NetworkBehaviour {
+public class OnlineMiddleWall : MonoBehaviour {
     // public static OnlineMiddleWall Instance;
     //
     // private void Awake() {

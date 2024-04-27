@@ -8,16 +8,19 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class OnlineGameUI : MiniPage {
-    [SerializeField] TestDocDash testDocDash;
-    [SerializeField] TestPatDash testPatDash;
+    [SerializeField] StyleSheet styles;
+    [SerializeField] DoctorDashboard doctorDashboard;
+    [SerializeField] PatientDashboard patientDashboard;
     [SerializeField] private GameObject gameEnv;
     
     
     private Label ballCounterLabel;
     protected override void RenderPage() {
+        AddStyleSheet(styles);
+
         SetupEvents();
         
-        ballCounterLabel = CreateAndAddElement<Label>();
+        ballCounterLabel = CreateAndAddElement<Label>("ballCounterLabel");
     }
 
     // private void Start() {
@@ -31,8 +34,10 @@ public class OnlineGameUI : MiniPage {
 
     public void ShowGameCompletedUI() {
         _root.Clear();
-        
-        var retryBtn = CreateAndAddElement<Button>();
+
+        var main = CreateAndAddElement<MiniElement>("main");
+
+        var retryBtn = main.CreateAndAddElement<Button>("btn");
         retryBtn.text = "Play Again?";
         retryBtn.clicked += () => {
             if (UserDataManager.Instance.userRole == "Patient") {
@@ -43,7 +48,7 @@ public class OnlineGameUI : MiniPage {
             }
         };
 
-        var exitBtn = CreateAndAddElement<Button>();
+        var exitBtn = main.CreateAndAddElement<Button>("btn");
         exitBtn.text = "Exit to Dashboard";
         exitBtn.clicked += () => {
             _root.Clear();
@@ -53,10 +58,10 @@ public class OnlineGameUI : MiniPage {
             gameEnv.SetActive(false);
             
             if (UserDataManager.Instance.userRole == "Patient") {
-                testPatDash.enabled = true;
+                patientDashboard.enabled = true;
             }
             else {
-                testDocDash.enabled = true;
+                doctorDashboard.enabled = true;
             }
         };
     }
@@ -64,7 +69,7 @@ public class OnlineGameUI : MiniPage {
     private void SetupEvents() {
         OnlineGameManager.Instance.OnGameStarted += () => {
             _root.Clear();
-            ballCounterLabel = CreateAndAddElement<Label>();
+            ballCounterLabel = CreateAndAddElement<Label>("ballCounterLabel");
         };
     }
 }
