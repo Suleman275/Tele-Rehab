@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5379134088585557557}
   - component: {fileID: 1953502709132380309}
   - component: {fileID: 7734743611331666323}
+  - component: {fileID: 1781385880896769136}
   m_Layer: 0
   m_Name: Right Hand
   m_TagString: Untagged
@@ -166,6 +167,20 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &1781385880896769136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670653650205129488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d04f8a3c3273340803fa15e33dcfc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectId: 
+  objectName: 
 --- !u!1 &2996039091110485277
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHand: {fileID: 6429327858037432473}
   rightHand: {fileID: 1670653650205129488}
-  sensitivity: 3
+  sensitivity: 2
 --- !u!1 &6429327858037432473
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,6 +297,7 @@ GameObject:
   - component: {fileID: 2275137309497721913}
   - component: {fileID: 2984969160825828433}
   - component: {fileID: 3204213101867823996}
+  - component: {fileID: 6581388129979766793}
   m_Layer: 0
   m_Name: Left Hand
   m_TagString: Untagged
@@ -435,3 +451,17 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &6581388129979766793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429327858037432473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d04f8a3c3273340803fa15e33dcfc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectId: 
+  objectName: 

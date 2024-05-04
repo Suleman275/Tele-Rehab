@@ -24,6 +24,8 @@ public class OnlineBallSpawner : NetworkBehaviour {
             Vector3 spawnPosition = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z);
             var ball = Instantiate(ballPrefab, spawnPosition, Quaternion.identity).GetComponent<OnlineBall>();
             ball.NetworkObject.Spawn();
+
+            DataRecorder.Instance.AddObjectToTrack(ball.gameObject);
         }
     }
 }

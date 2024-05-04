@@ -22,6 +22,7 @@ public class UnityServicesManager : MonoBehaviour {
     public string relayJoinCode;
 
     public Lobby currentLobby;
+    public bool isLobbyHost;
     
     private float lobbyPollTimer;
     public string lobbyId; // here for testing
@@ -66,7 +67,7 @@ public class UnityServicesManager : MonoBehaviour {
 //        options.SetProfile(ClonesManager.IsClone() ? ClonesManager.GetArgument() : "Primary");
 //#endif
 
-//      await UnityServices.InitializeAsync(options);
+//        await UnityServices.InitializeAsync(options);
         await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
@@ -88,6 +89,8 @@ public class UnityServicesManager : MonoBehaviour {
             };
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync(UserDataManager.Instance.userEmail, 2, options);
+
+            isLobbyHost = true;
 
             JoinVivoxChannel(currentLobby.Id);
 
@@ -158,5 +161,16 @@ public class UnityServicesManager : MonoBehaviour {
         else {
             print("not logged into vivox");
         }
+    }
+
+    private async void OnApplicationQuit() {
+        string playerId = AuthenticationService.Instance.PlayerId;
+        await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+
+        if (isLobbyHost) {
+            await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
+        }
+
+        LeaveVivoxChannel();
     }
 }

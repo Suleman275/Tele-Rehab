@@ -42,6 +42,7 @@ public class OnlinePatientPreGamePage : MiniPage {
 
         UnityServicesManager.Instance.OnDoctorJoined += () => {
             doctorNameLabel.text = UnityServicesManager.Instance.currentLobby.Players[1].Data["PlayerName"].Value + " has joined";
+            UserDataManager.Instance.joinedDoctorName = UnityServicesManager.Instance.currentLobby.Players[1].Data["PlayerName"].Value;
         };
 
         UnityServicesManager.Instance.OnLobbyCreated += () => {

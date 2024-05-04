@@ -52,6 +52,8 @@ public class OnlineGameManager : NetworkBehaviour {
                 StartGameClientRPC(wallHeight.Value, numOfCompletedBalls, numOfBalls.Value);
                 
                 onlineBallSpawner.SpawnBalls(numOfBalls.Value);
+
+                DataRecorder.Instance.StartReccording();
             }
         }
     }
@@ -87,7 +89,23 @@ public class OnlineGameManager : NetworkBehaviour {
             numOfCompletedBalls = 0;
             
             ShowGameCompletedUIClientRPC();
+
+            //DataRecorder.Instance.StopReccording();
+
+            StartCoroutine(StopRecordingCoroutine());
+
+            var sessionDatajson = DataRecorder.Instance.ExportDataToJson();
+
+            APIManager.Instance.TryPostSessionData(sessionDatajson);
         }
+    }
+
+    IEnumerator StopRecordingCoroutine() {
+        var delay = new WaitForSeconds(2);
+
+        yield return delay;
+
+        DataRecorder.Instance.StopReccording();
     }
 
     [ClientRpc]

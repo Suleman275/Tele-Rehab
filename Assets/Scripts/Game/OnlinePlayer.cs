@@ -25,6 +25,12 @@ public class OnlinePlayer : NetworkBehaviour {
                     sensitivity = 1;
                 }
             }
+
+
+            if (IsServer) {
+                DataRecorder.Instance.AddObjectToTrack(leftHand);
+                DataRecorder.Instance.AddObjectToTrack(rightHand);
+            }
         }
     }
 

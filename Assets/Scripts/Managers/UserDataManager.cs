@@ -7,6 +7,9 @@ public class UserDataManager : MonoBehaviour {
     public string userEmail;
     public string userRole;
     public string userId;
+
+    public string joinedDoctorName;
+
     private void Awake() {
         Instance = this;
     }

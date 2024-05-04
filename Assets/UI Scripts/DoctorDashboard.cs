@@ -33,7 +33,7 @@ public class DoctorDashboard : MiniPage {
         var pastSessionsBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");
         pastSessionsBtn.text = "View Past Sessions";
         pastSessionsBtn.clicked += () => {
-            print("To be implemented");
+            router.Navigate(this, "PastSessionsPage");
         };
 
         var searchRoomsBtn = btnGroup.CreateAndAddElement<Button>("actionBtn");

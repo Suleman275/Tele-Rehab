@@ -1,0 +1,16 @@
+2024-04-29 12:17:55,443 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 12:22:59,959 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 12:24:48,285 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 12:26:33,573 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 12:28:27,995 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 12:31:37,139 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 13:12:13,607 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+
+2024-04-29 13:13:02,679 ERROR [orbbec.ni.device_streamset] failed to open device: 	Could not open "\\?\usb#vid_2bc5&pid_060f&mi_00#7&fdcb450&0&0000#{c3b5f022-5a42-1980-1909-ea72095601b1}": Failed to send a USB control request!
+

@@ -6,7 +6,7 @@ using UnityEngine.Networking; // Import the necessary namespace
 public class APIManager : MonoBehaviour {
     public static APIManager Instance;
     //private string baseUrl = "http://localhost:3000"; // Your Express API URL
-    private string baseUrl = "https://6f6d-94-122-33-91.ngrok-free.app"; // Your Express API URL
+    private string baseUrl = "https://fc60-94-122-46-79.ngrok-free.app"; // Your Express API URL
     
     //Events
     public Action<UserDataModel> UserSignedIn;
@@ -126,6 +126,69 @@ public class APIManager : MonoBehaviour {
                 else {
                     AppointmentCreated?.Invoke();
                 }
+            }
+        }
+    }
+
+    public void TryPostSessionData(string json) {
+        StartCoroutine(SendSessionData(json));
+    }
+
+    IEnumerator SendSessionData(string json) {
+        string url = $"{baseUrl}/sessions";
+
+        using (UnityWebRequest request = UnityWebRequest.Post(url, json, "application/json")) {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success) {
+                string responseJson = request.downloadHandler.text;
+
+                print(responseJson);
+            }
+            else {
+                Debug.LogError("Error posting data in: " + request.error);
+            }
+        }
+    }
+
+    public void TryGetPastSessions(Action<string> callback) {
+        StartCoroutine(SendPastSessionsGetRequest(callback));
+    }
+
+    IEnumerator SendPastSessionsGetRequest(Action<string> callback) {
+        string url = $"{baseUrl}/sessions";
+
+        using (UnityWebRequest request = UnityWebRequest.Get(url)) {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success) {
+                string responseJson = request.downloadHandler.text;
+
+                callback(responseJson);
+            }
+            else {
+                Debug.LogError("Error getting data: " + request.error);
+            }
+        }
+    }
+
+    public void TryGetPastSession(string sessionId, Action<string> callback) {
+        StartCoroutine(SendGetSessionDataRequest(sessionId, callback));
+    }
+
+    IEnumerator SendGetSessionDataRequest(string sessionId, Action<string> callback) {
+        string url = $"{baseUrl}/sessions/{sessionId}";
+
+        using (UnityWebRequest request = UnityWebRequest.Get(url)) {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success) {
+                string responseJson = request.downloadHandler.text;
+
+                callback(responseJson);
+            }
+            else {
+                Debug.LogError("Error getting data: " + request.error);
             }
         }
     }
