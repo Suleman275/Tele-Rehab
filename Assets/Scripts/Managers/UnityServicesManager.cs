@@ -163,14 +163,14 @@ public class UnityServicesManager : MonoBehaviour {
         }
     }
 
-    private async void OnApplicationQuit() {
-        string playerId = AuthenticationService.Instance.PlayerId;
-        await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+    //private async void OnApplicationQuit() {
+    //    string playerId = AuthenticationService.Instance.PlayerId;
+    //    await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
 
-        if (isLobbyHost) {
-            await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
-        }
+    //    if (isLobbyHost) {
+    //        await LobbyService.Instance.DeleteLobbyAsync(currentLobby.Id);
+    //    }
 
-        LeaveVivoxChannel();
-    }
+    //    LeaveVivoxChannel();
+    //}
 }

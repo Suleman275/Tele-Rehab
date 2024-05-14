@@ -17,6 +17,7 @@ public class OfflineGameManager : MonoBehaviour {
     private int numCompletedBalls;
     private int totalBalls;
     private int wallHeight;
+    
     private void Awake() {
         Instance = this;
         numCompletedBalls = 0;
